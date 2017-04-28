@@ -47,6 +47,8 @@ $config = [
         ],
         */
     ],
+    'language' => 'ru-RU',
+    'name' => 'Slinky',
     'params' => $params,
 ];
 

@@ -33,4 +33,20 @@ class SiteController extends Controller
 			'model' => $model,
         ]);
     }
+    
+    /**
+     * Получение короткой ссылки черех Ajax
+     * 
+     * return string
+     */
+    public function actionShorten()
+    {
+		$model = new Link();
+		
+		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			return $model->shortLink;
+		} else {
+			return 'Error';
+		}
+	}
 }

@@ -29,7 +29,7 @@ class Link extends ActiveRecord
     {
         return [
             [['link'], 'required'],
-            [['link'], 'string'],
+            [['link'], 'url', 'defaultScheme' => 'http'],
             
             [['shortLink'], 'required'],
             [['shortLink'], 'string', 'length' => [4, 255]],
@@ -47,4 +47,28 @@ class Link extends ActiveRecord
             'shortLink' => Yii::t('app', 'Short Link'),
         ];
     }
+    
+    /**
+     * @inheritdoc
+     */
+    public function beforeValidate()
+    {
+		if (!parent::beforeValidate()) {
+			return false;
+		}
+		
+		$this->generateShortLink();
+	}
+	
+	/**
+	 * Генерирует коротку ссылку
+	 */
+	private function generateShortLink()
+	{
+		if (!empty($this->shortLink)) {
+			return;
+		}
+		
+		// TODO: Алгоритм генерации короткой ссылки
+	}
 }
