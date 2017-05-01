@@ -62,7 +62,7 @@ class SiteController extends Controller
 	/**
 	 * Переход по короткой ссылке
 	 * 
-	 * @param string $sl Код короткой ссылки
+	 * @param string $shortLink Код короткой ссылки
 	 */
 	public function actionGo($shortLink)
 	{
