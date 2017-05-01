@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use app\models\Link;
 use Yii;
-use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 

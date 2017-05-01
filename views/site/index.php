@@ -13,7 +13,7 @@ ShortenAsset::register($this);
 <div class="site-index">
 	<h1><?= Yii::$app->name ?></h1>
 	
-	<p><?= Yii::t('app', 'URL shortener service.') ?> <?= Yii::t('app', 'Input your link to the field below.') ?></p>
+	<p><?= Yii::t('app', 'URL shortener service.') ?> <?= Yii::t('app', 'Enter your link to the field below.') ?></p>
 	
 	<?php $form = ActiveForm::begin([
 		'action' => ['site/shorten'],
@@ -25,7 +25,7 @@ ShortenAsset::register($this);
 		<?= $form->field($model, 'link')->textInput()->label(false) ?>
 		
 		<div class="form-group">
-			<?= Html::submitButton(Yii::t('app', 'Shorten URL'), ['class' => 'btn btn-primary']) ?>
+			<?= Html::submitButton(Yii::t('app', 'Shorten'), ['class' => 'btn btn-primary']) ?>
 		</div>
 		
 	<?php ActiveForm::end() ?>
