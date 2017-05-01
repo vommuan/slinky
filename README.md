@@ -10,13 +10,19 @@ Open URL shortener service.
 git clone https://github.com/vommuan/slinky.git slinky
 ```
 
-2. Создать пустую базу данных.
-3. Переименовать файл config/db_sample.php в config/db.php
-4. Открыть файл config/db.php и ввести параметры подключения к базе данных.
-5. Выполнить миграции.
+2. Выполнить установку зависимых пакетов:
+
+```bash
+composer install
+```
+
+3. Создать пустую базу данных.
+4. Переименовать файл config/db_sample.php в config/db.php
+5. Открыть файл config/db.php и ввести параметры подключения к базе данных.
+6. Выполнить миграции.
 
 ```bash
 yii migrate
 ```
 
-6. Настроить веб-сервер (Apache или Nginx). Корень сайта приходится на папку: web/
+7. Настроить веб-сервер (Apache или Nginx). Корень сайта приходится на папку: web/
