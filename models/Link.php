@@ -20,6 +20,16 @@ class Link extends ActiveRecord
     const START_SHORT_LINK = '0000';
     
     /**
+     * @var array Допустимые символы для сокращенной ссылки
+     */
+    private $symbols;
+    
+    /**
+     * @var integer Количество допустимых символов для сокращенной ссылки
+     */
+    private $symbolsNumber;
+    
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -68,11 +78,11 @@ class Link extends ActiveRecord
 	}
 	
 	/**
-	 * Получает список допустимых символов для сокращенной ссылки
+	 * Инициализирует список допустимых символов для сокращенной ссылки
 	 * 
 	 * @return array
 	 */
-	private function getSymbols()
+	private function initSymbols()
 	{
 		$symbols = array_merge(
 			array_map(
@@ -90,7 +100,8 @@ class Link extends ActiveRecord
 		
 		sort($symbols);
 		
-		return $symbols;
+		$this->symbols = $symbols;
+		$this->symbolsNumber = count($symbols);
 	}
 	
 	/**
@@ -111,22 +122,19 @@ class Link extends ActiveRecord
 	 */
 	private function getNextShortLink($currentLink)
 	{
-		$symbols = $this->getSymbols();
-		$lastSymbolIndex = count($symbols) - 1;
-		
 		if ('' === $currentLink) {
-			return $symbols[0];
+			return $this->symbols[0];
 		}
 		
 		$lastLinkSymbol = substr($currentLink, -1);
 		$currentLink = substr($currentLink, 0, -1);
 		
-		$lastLinkSymbolIndex = array_search($lastLinkSymbol, $symbols);
+		$lastLinkSymbolIndex = array_search($lastLinkSymbol, $this->symbols);
 		
-		if ($lastLinkSymbolIndex == $lastSymbolIndex) {
-			return $this->getNextShortLink($currentLink) . $symbols[0];
+		if ($lastLinkSymbolIndex == $this->symbolsNumber - 1) {
+			return $this->getNextShortLink($currentLink) . $this->symbols[0];
 		} else {
-			return $currentLink . $symbols[$lastLinkSymbolIndex + 1];
+			return $currentLink . $this->symbols[$lastLinkSymbolIndex + 1];
 		}
 	}
 	
@@ -146,6 +154,7 @@ class Link extends ActiveRecord
 			return;
 		}
 		
+		$this->initSymbols();
 		$this->shortLink = $this->getNextShortLink($lastLink->shortLink);
 	}
 }
