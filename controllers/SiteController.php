@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Link;
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
 
 class SiteController extends Controller
@@ -43,10 +44,14 @@ class SiteController extends Controller
     {
 		$model = new Link();
 		
+		$transaction = Yii::$app->db->beginTransaction();
+		
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-			return $model->shortLink;
+			$transaction->commit();
+			return Url::to(['/' . $model->shortLink], true);
 		} else {
-			return 'Error';
+			$transaction->rollBack();
+			return Yii::t('app', 'Something went wrong. Please, try again later.');
 		}
 	}
 }

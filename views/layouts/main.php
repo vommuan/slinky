@@ -31,11 +31,14 @@ AppAsset::register($this);
 <footer class="footer">
     <div class="container">
         <p class="pull-left">
-			<a href="http://itdevweb.com">&copy; iT-DevWeb <?= date('Y') ?></a>
+			<a href="http://itdevweb.com" target="_blank">&copy; iT-DevWeb <?= date('Y') ?></a>
 		</p>
 
         <p class="pull-right">
-			<a href="http://vk.com/vommuan"><?= Yii::t('app', 'Developer') ?></a>
+			<a href="http://vk.com/vommuan" target="_blank">
+				<?= Yii::t('app', 'Developed by') ?>
+				Michael Naumov
+			</a>
         </p>
     </div>
 </footer>

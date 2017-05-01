@@ -15,6 +15,11 @@ use yii\db\ActiveRecord;
 class Link extends ActiveRecord
 {
     /**
+     * Начальная короткая ссылка
+     */
+    const START_SHORT_LINK = '0000';
+    
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -58,6 +63,71 @@ class Link extends ActiveRecord
 		}
 		
 		$this->generateShortLink();
+		
+		return true;
+	}
+	
+	/**
+	 * Получает список допустимых символов для сокращенной ссылки
+	 * 
+	 * @return array
+	 */
+	private function getSymbols()
+	{
+		$symbols = array_merge(
+			array_map(
+				function($value) {
+					return (string) $value;
+				},
+				range(0, 9)
+			),
+			range('a', 'z')
+		);
+		
+		if ('mysql' !== $this->db->driverName) {
+			$symbols = array_merge($symbols, range('A', 'Z'));
+		}
+		
+		sort($symbols);
+		
+		return $symbols;
+	}
+	
+	/**
+	 * Получает запись о последней ссылке из базы данных
+	 * 
+	 * @return string
+	 */
+	private function getLastLink()
+	{
+		return self::find()->orderBy(['id' => SORT_DESC])->limit(1)->one();
+	}
+	
+	/**
+	 * Получает следующую короткую ссылку
+	 * 
+	 * @param string $currentLink Текущая ссылка
+	 * @return string
+	 */
+	private function getNextShortLink($currentLink)
+	{
+		$symbols = $this->getSymbols();
+		$lastSymbolIndex = count($symbols) - 1;
+		
+		if ('' === $currentLink) {
+			return $symbols[0];
+		}
+		
+		$lastLinkSymbol = substr($currentLink, -1);
+		$currentLink = substr($currentLink, 0, -1);
+		
+		$lastLinkSymbolIndex = array_search($lastLinkSymbol, $symbols);
+		
+		if ($lastLinkSymbolIndex == $lastSymbolIndex) {
+			return $this->getNextShortLink($currentLink) . $symbols[0];
+		} else {
+			return $currentLink . $symbols[$lastLinkSymbolIndex + 1];
+		}
 	}
 	
 	/**
@@ -69,6 +139,13 @@ class Link extends ActiveRecord
 			return;
 		}
 		
-		// TODO: Алгоритм генерации короткой ссылки
+		$lastLink = $this->getLastLink();
+		
+		if (!isset($lastLink)) {
+			$this->shortLink = self::START_SHORT_LINK;
+			return;
+		}
+		
+		$this->shortLink = $this->getNextShortLink($lastLink->shortLink);
 	}
 }
