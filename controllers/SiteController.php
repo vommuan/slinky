@@ -6,6 +6,7 @@ use app\models\Link;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
@@ -53,5 +54,21 @@ class SiteController extends Controller
 			$transaction->rollBack();
 			return Yii::t('app', 'Something went wrong. Please, try again later.');
 		}
+	}
+	
+	/**
+	 * Переход по короткой ссылке
+	 * 
+	 * @param string $sl Код короткой ссылки
+	 */
+	public function actionGo($shortLink)
+	{
+		$model = Link::findOne(['shortLink' => $shortLink]);
+		
+		if (!isset($model)) {
+			throw new NotFoundHttpException(Yii::t('app', 'The requested page not found.'));
+		}
+		
+		$this->redirect($model->link);
 	}
 }
