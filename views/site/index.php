@@ -17,6 +17,7 @@ ShortenAsset::register($this);
 	
 	<?php $form = ActiveForm::begin([
 		'action' => ['site/shorten'],
+		'validateOnSubmit' => false,
 		'options' => [
 			'class' => 'shorten-form',
 		],

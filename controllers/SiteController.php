@@ -49,10 +49,14 @@ class SiteController extends Controller
 		
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
 			$transaction->commit();
-			return Url::to(['/' . $model->shortLink], true);
+			
+			return $this->renderAjax('_shortLink', [
+				'shortLink' => $model->shortLink,
+			]);
 		} else {
 			$transaction->rollBack();
-			return Yii::t('app', 'Something went wrong. Please, try again later.');
+			
+			return $this->renderAjax('_shortLinkError');
 		}
 	}
 	
